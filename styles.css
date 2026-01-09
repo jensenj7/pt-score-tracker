@@ -1,0 +1,64 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.screen {
+  display: none;
+  height: calc(100vh - 60px);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.screen.active {
+  display: block;
+}
+
+.nav {
+  height: 60px;
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #222;
+}
+
+.nav button {
+  flex: 1;
+  border: none;
+  background: #222;
+  color: white;
+  font-size: 16px;
+}
+
+.nav button:hover {
+  background: #444;
+}
+
+#cadetsScreen { background: #f4f4f4; }
+#pushupsScreen { background: #e8f4ff; }
+#situpsScreen { background: #e8ffe8; }
+#runScreen { background: #fff2e6; }
+#sprintScreen { background: #ffe8e8; }
+
+.big-timer {
+  font-size: 42px;
+  margin-bottom: 15px;
+}
+
+.run-row {
+  margin-bottom: 8px;
+  padding: 8px;
+  border: 1px solid #aaa;
+  background: white;
+  cursor: grab;
+}
+
+.run-row.dragging {
+  opacity: 0.5;
+}
+
+input {
+  padding: 6px;
+  font-size: 16px;
+}

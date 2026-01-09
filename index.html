@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PT Score Tracker</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Mobile scaling -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Theme color -->
+  <meta name="theme-color" content="#222222">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ================= SCREENS ================= -->
+
+<div class="screen active" id="cadetsScreen">
+  <h1>Cadet Roster</h1>
+
+  <input id="newCadetName" placeholder="Enter cadet name">
+  <button onclick="addCadet()">Add Cadet</button>
+
+  <ul id="cadetList"></ul>
+</div>
+
+<div class="screen" id="pushupsScreen">
+  <h1>Pushups</h1>
+  <div id="pushupTimer" class="big-timer">01:00.00</div>
+  <button onclick="startPushups()">Start</button>
+  <button onclick="resetPushups()">Reset</button>
+  <hr>
+  <div id="pushupList"></div>
+</div>
+
+<div class="screen" id="situpsScreen">
+  <h1>Situps</h1>
+  <div id="situpTimer" class="big-timer">01:00.00</div>
+  <button onclick="startSitups()">Start</button>
+  <button onclick="resetSitups()">Reset</button>
+  <hr>
+  <div id="situpList"></div>
+</div>
+
+<div class="screen" id="runScreen">
+  <h1>1.5 Mile Run</h1>
+  <div id="runTimer" class="big-timer">00:00.00</div>
+  <button onclick="startRun()">START RUN</button>
+  <button onclick="resetRun()">RESET</button>
+  <hr>
+  <div id="runList"></div>
+</div>
+
+<div class="screen" id="sprintScreen">
+  <h1>300 Meter Sprint</h1>
+  <div id="sprintTimer" class="big-timer">00:00.00</div>
+  <button onclick="startSprint()">START SPRINT</button>
+  <button onclick="resetSprint()">RESET</button>
+  <hr>
+  <div id="sprintList"></div>
+</div>
+
+<!-- ================= NAV ================= -->
+
+<div class="nav">
+  <button onclick="showScreen('cadetsScreen')">Cadets</button>
+  <button onclick="showScreen('pushupsScreen')">Pushups</button>
+  <button onclick="showScreen('situpsScreen')">Situps</button>
+  <button onclick="showScreen('runScreen')">1.5 Run</button>
+  <button onclick="showScreen('sprintScreen')">300m</button>
+</div>
+
+<!-- ================= SCRIPTS ================= -->
+
+<script src="script.js"></script>
+
+<!-- Service Worker Registration -->
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js")
+    .then(() => console.log("Service Worker Registered"))
+    .catch(err => console.error("Service Worker Failed:", err));
+}
+</script>
+
+</body>
+</html>
