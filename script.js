@@ -288,8 +288,10 @@ function renderRun() {
     row.draggable = true;
     row.dataset.idx = idx;
 
+    // ✅ LAPS DISPLAY IS BACK (but still not exported)
     row.innerHTML = `
       <strong>${c.name}</strong>
+      | Laps: ${c.laps}
       | Time: ${c.runTime || "--:--.--"}
       <button onclick="addLap(${idx})">+Lap</button>
       <button onclick="stopRunner(${idx})">STOP</button>
@@ -358,6 +360,7 @@ function renderSprint() {
 
 /******************** EXPORT ********************/
 function exportToExcel() {
+  // ✅ No laps exported
   let csv = "Name,Pushups,Situps,1.5 Mile Time,300m Time\n";
 
   cadets.forEach(c => {
