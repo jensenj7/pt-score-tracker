@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PT Score Tracker</title>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -17,63 +17,65 @@
   <button onclick="showScreen('sprint')">300m</button>
 </nav>
 
-<!-- CADETS -->
 <div id="cadets" class="screen active">
   <h2>Cadets</h2>
-  <input id="newCadetName" placeholder="Enter cadet name" />
+  <input id="newCadetName" placeholder="Cadet name">
   <button onclick="addCadet()">Add Cadet</button>
   <ul id="cadetList"></ul>
 </div>
 
-<!-- PUSHUPS -->
 <div id="pushups" class="screen">
   <h2>Pushups</h2>
   <div class="timer">
     <span id="pushupTimer">01:00.00</span>
     <button onclick="startPushups()">Start</button>
-    <button onclick="resetPushups()">Reset Timer</button>
+    <button onclick="resetPushups()">Reset</button>
   </div>
-  <button onclick="clearPushups()" class="danger">Clear Pushup Scores</button>
   <div id="pushupList"></div>
+  <div class="admin-box">
+    <button class="danger" onclick="clearPushups()">Clear Pushup Scores</button>
+  </div>
 </div>
 
-<!-- SITUPS -->
 <div id="situps" class="screen">
   <h2>Situps</h2>
   <div class="timer">
     <span id="situpTimer">01:00.00</span>
     <button onclick="startSitups()">Start</button>
-    <button onclick="resetSitups()">Reset Timer</button>
+    <button onclick="resetSitups()">Reset</button>
   </div>
-  <button onclick="clearSitups()" class="danger">Clear Situp Scores</button>
   <div id="situpList"></div>
+  <div class="admin-box">
+    <button class="danger" onclick="clearSitups()">Clear Situp Scores</button>
+  </div>
 </div>
 
-<!-- RUN -->
 <div id="run" class="screen">
   <h2>1.5 Mile Run</h2>
   <div class="timer">
     <span id="runTimer">00:00.00</span>
     <button onclick="startRun()">Start</button>
-    <button onclick="resetRun()">Reset Timer</button>
+    <button onclick="resetRun()">Reset</button>
   </div>
-  <button onclick="clearRunScores()" class="danger">Clear Run Scores</button>
   <div id="runList"></div>
+  <div class="admin-box">
+    <button class="danger" onclick="clearRunScores()">Clear Run Scores</button>
+  </div>
 </div>
 
-<!-- SPRINT -->
 <div id="sprint" class="screen">
   <h2>300 Meter Sprint</h2>
   <div class="timer">
     <span id="sprintTimer">00:00.00</span>
     <button onclick="startSprint()">Start</button>
-    <button onclick="resetSprint()">Reset Timer</button>
+    <button onclick="resetSprint()">Reset</button>
   </div>
-  <button onclick="clearSprintScores()" class="danger">Clear Sprint Scores</button>
   <div id="sprintList"></div>
+  <div class="admin-box">
+    <button class="danger" onclick="clearSprintScores()">Clear Sprint Scores</button>
+  </div>
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
