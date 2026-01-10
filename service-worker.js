@@ -1,20 +1,20 @@
-const CACHE_NAME = "pt-tracker-v2"; // ⬅ bump version to force update
+const CACHE_NAME = "pt-tracker-v3";
 
-const FILES_TO_CACHE = [
-  "./",
-  "./index.html",
-  "./styles.css",
-  "./script.js",
-  "./manifest.json"
-];
-
+/* Install: cache everything the app actually loads */
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
+    caches.open(CACHE_NAME).then(cache => {
+      return fetch("./")
+        .then(() => cache.addAll([
+          self.registration.scope,
+        ]))
+        .catch(() => {});
+    })
   );
   self.skipWaiting();
 });
 
+/* Activate: remove old caches */
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -26,8 +26,26 @@ self.addEventListener("activate", event => {
   self.clients.claim();
 });
 
+/* Fetch: cache-first for same-origin requests */
 self.addEventListener("fetch", event => {
+  if (event.request.method !== "GET") return;
+
   event.respondWith(
-    caches.match(event.request).then(resp => resp || fetch(event.request))
+    caches.match(event.request).then(cached => {
+      if (cached) return cached;
+
+      return fetch(event.request)
+        .then(response => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, copy);
+          });
+          return response;
+        })
+        .catch(() => {
+          // Offline fallback: try index.html
+          return caches.match("./index.html");
+        });
+    })
   );
 });
