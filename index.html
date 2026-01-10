@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PT Score Tracker</title>
+
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -27,9 +28,7 @@
   <ul id="cadetList"></ul>
 
   <div class="admin-box">
-    <button class="danger" onclick="exportToExcel()">
-      Export Scores (CSV)
-    </button>
+    <button class="danger" onclick="exportToExcel()">Export Scores (CSV)</button>
   </div>
 </div>
 
@@ -41,7 +40,9 @@
     <button onclick="startPushups()">Start</button>
     <button onclick="resetPushups()">Reset</button>
   </div>
+
   <div id="pushupList"></div>
+
   <div class="admin-box">
     <button class="danger" onclick="clearPushups()">Clear Pushup Scores</button>
   </div>
@@ -55,7 +56,9 @@
     <button onclick="startSitups()">Start</button>
     <button onclick="resetSitups()">Reset</button>
   </div>
+
   <div id="situpList"></div>
+
   <div class="admin-box">
     <button class="danger" onclick="clearSitups()">Clear Situp Scores</button>
   </div>
@@ -69,7 +72,9 @@
     <button onclick="startRun()">Start</button>
     <button onclick="resetRun()">Reset</button>
   </div>
+
   <div id="runList"></div>
+
   <div class="admin-box">
     <button class="danger" onclick="clearRunScores()">Clear Run Scores</button>
   </div>
@@ -83,13 +88,16 @@
     <button onclick="startSprint()">Start</button>
     <button onclick="resetSprint()">Reset</button>
   </div>
+
   <div id="sprintList"></div>
+
   <div class="admin-box">
     <button class="danger" onclick="clearSprintScores()">Clear Sprint Scores</button>
   </div>
 </div>
 
+<!-- CRITICAL: defer makes offline cold-start reliable -->
 <script src="script.js" defer></script>
+
 </body>
 </html>
-
