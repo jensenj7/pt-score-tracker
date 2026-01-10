@@ -17,13 +17,23 @@
   <button onclick="showScreen('sprint')">300m</button>
 </nav>
 
+<!-- CADETS -->
 <div id="cadets" class="screen active">
   <h2>Cadets</h2>
+
   <input id="newCadetName" placeholder="Cadet name">
   <button onclick="addCadet()">Add Cadet</button>
+
   <ul id="cadetList"></ul>
+
+  <div class="admin-box">
+    <button class="danger" onclick="exportToExcel()">
+      Export Scores (CSV)
+    </button>
+  </div>
 </div>
 
+<!-- PUSHUPS -->
 <div id="pushups" class="screen">
   <h2>Pushups</h2>
   <div class="timer">
@@ -37,6 +47,7 @@
   </div>
 </div>
 
+<!-- SITUPS -->
 <div id="situps" class="screen">
   <h2>Situps</h2>
   <div class="timer">
@@ -50,6 +61,7 @@
   </div>
 </div>
 
+<!-- RUN -->
 <div id="run" class="screen">
   <h2>1.5 Mile Run</h2>
   <div class="timer">
@@ -63,6 +75,7 @@
   </div>
 </div>
 
+<!-- SPRINT -->
 <div id="sprint" class="screen">
   <h2>300 Meter Sprint</h2>
   <div class="timer">
