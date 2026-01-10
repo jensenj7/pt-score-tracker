@@ -1,20 +1,24 @@
-const CACHE_NAME = "pt-tracker-v3";
+const CACHE_NAME = "pt-tracker-v4";
 
-/* Install: cache everything the app actually loads */
+const APP_SHELL = [
+  "./",
+  "./index.html",
+  "./styles.css",
+  "./script.js",
+  "./manifest.json"
+];
+
+// INSTALL — cache app shell
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      return fetch("./")
-        .then(() => cache.addAll([
-          self.registration.scope,
-        ]))
-        .catch(() => {});
+      return cache.addAll(APP_SHELL);
     })
   );
   self.skipWaiting();
 });
 
-/* Activate: remove old caches */
+// ACTIVATE — clean old caches
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -26,7 +30,7 @@ self.addEventListener("activate", event => {
   self.clients.claim();
 });
 
-/* Fetch: cache-first for same-origin requests */
+// FETCH — cache-first for same-origin
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
 
@@ -42,10 +46,7 @@ self.addEventListener("fetch", event => {
           });
           return response;
         })
-        .catch(() => {
-          // Offline fallback: try index.html
-          return caches.match("./index.html");
-        });
+        .catch(() => caches.match("./index.html"));
     })
   );
 });
