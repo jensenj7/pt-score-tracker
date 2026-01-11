@@ -33,7 +33,6 @@
 
 <div id="pushups" class="screen">
   <h2>Pushups</h2>
-
   <div class="timer">
     <span id="pushupTimer">01:00.00</span>
     <button onclick="startPushups()">Start</button>
@@ -49,7 +48,6 @@
 
 <div id="situps" class="screen">
   <h2>Situps</h2>
-
   <div class="timer">
     <span id="situpTimer">01:00.00</span>
     <button onclick="startSitups()">Start</button>
@@ -65,7 +63,6 @@
 
 <div id="run" class="screen">
   <h2>1.5 Mile Run</h2>
-
   <div class="timer">
     <span id="runTimer">00:00.00</span>
     <button onclick="startRun()">Start</button>
@@ -81,7 +78,6 @@
 
 <div id="sprint" class="screen">
   <h2>300 Meter Sprint</h2>
-
   <div class="timer">
     <span id="sprintTimer">00:00.00</span>
     <button onclick="startSprint()">Start</button>
@@ -95,10 +91,20 @@
   </div>
 </div>
 
-<!-- Load your app code AFTER DOM is parsed -->
+<!-- ===== Custom Confirmation Modal ===== -->
+<div id="confirmOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:#1f1f1f; color:#fff; width:min(92vw, 420px); border-radius:10px; padding:18px; border:1px solid #444;">
+    <div style="font-size:18px; font-weight:700; margin-bottom:10px;">Confirm</div>
+    <div id="confirmMessage" style="font-size:16px; margin-bottom:16px;"></div>
+    <div style="display:flex; gap:10px; justify-content:flex-end;">
+      <button onclick="confirmCancel()" style="padding:10px 14px; border-radius:8px; border:none; background:#444; color:#fff;">Cancel</button>
+      <button onclick="confirmOk()" style="padding:10px 14px; border-radius:8px; border:none; background:#a83232; color:#fff; font-weight:700;">OK</button>
+    </div>
+  </div>
+</div>
+
 <script src="script.js" defer></script>
 
-<!-- CRITICAL: register service worker so Android can cold-start offline -->
 <script>
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
