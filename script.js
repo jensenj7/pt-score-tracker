@@ -4,20 +4,13 @@ const STORAGE_KEY = "PT_TRACKER_DATA";
 function saveData() {
   localStorage.setItem(
     STORAGE_KEY,
-    JSON.stringify({
-      cadets,
-      pushupOrder,
-      situpOrder,
-      runOrder,
-      sprintOrder
-    })
+    JSON.stringify({ cadets, pushupOrder, situpOrder, runOrder, sprintOrder })
   );
 }
 
 function loadData() {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) return;
-
   const data = JSON.parse(raw);
   cadets = data.cadets || [];
   pushupOrder = data.pushupOrder || [];
@@ -50,15 +43,35 @@ let sprintActive = false;
 
 /******************** INIT ********************/
 loadData();
-window.onload = () => renderAll();
+window.addEventListener("DOMContentLoaded", () => renderAll());
 
 /******************** NAV ********************/
 function showScreen(id) {
-  document.querySelectorAll(".screen").forEach(s =>
-    s.classList.remove("active")
-  );
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
   renderAll();
+}
+
+/******************** CUSTOM CONFIRM MODAL ********************/
+let _confirmCallback = null;
+
+function showConfirm(message, onOk) {
+  _confirmCallback = typeof onOk === "function" ? onOk : null;
+  document.getElementById("confirmMessage").textContent = message;
+  const overlay = document.getElementById("confirmOverlay");
+  overlay.style.display = "flex";
+}
+
+function confirmCancel() {
+  _confirmCallback = null;
+  document.getElementById("confirmOverlay").style.display = "none";
+}
+
+function confirmOk() {
+  const cb = _confirmCallback;
+  _confirmCallback = null;
+  document.getElementById("confirmOverlay").style.display = "none";
+  if (cb) cb();
 }
 
 /******************** CADETS ********************/
@@ -90,20 +103,19 @@ function addCadet() {
 }
 
 function deleteCadet(idx) {
-  if (!confirm(`Remove ${cadets[idx].name}? This cannot be undone.`)) return;
+  const name = cadets[idx]?.name ?? "this cadet";
+  showConfirm(`Remove ${name}? This cannot be undone.`, () => {
+    cadets.splice(idx, 1);
 
-  cadets.splice(idx, 1);
+    const fix = arr => arr.filter(i => i !== idx).map(i => (i > idx ? i - 1 : i));
+    pushupOrder = fix(pushupOrder);
+    situpOrder = fix(situpOrder);
+    runOrder = fix(runOrder);
+    sprintOrder = fix(sprintOrder);
 
-  const fix = arr =>
-    arr.filter(i => i !== idx).map(i => (i > idx ? i - 1 : i));
-
-  pushupOrder = fix(pushupOrder);
-  situpOrder = fix(situpOrder);
-  runOrder = fix(runOrder);
-  sprintOrder = fix(sprintOrder);
-
-  saveData();
-  renderAll();
+    saveData();
+    renderAll();
+  });
 }
 
 /******************** TIME FORMAT ********************/
@@ -117,39 +129,43 @@ function formatTime(ms) {
 
 /******************** CLEAR PER EVENT ********************/
 function clearPushups() {
-  if (!confirm("Clear ALL pushup scores?")) return;
-  cadets.forEach(c => (c.pushups = ""));
-  saveData();
-  renderPushups();
+  showConfirm("Clear all pushup scores?", () => {
+    cadets.forEach(c => (c.pushups = ""));
+    saveData();
+    renderPushups();
+  });
 }
 
 function clearSitups() {
-  if (!confirm("Clear ALL situp scores?")) return;
-  cadets.forEach(c => (c.situps = ""));
-  saveData();
-  renderSitups();
+  showConfirm("Clear all situp scores?", () => {
+    cadets.forEach(c => (c.situps = ""));
+    saveData();
+    renderSitups();
+  });
 }
 
 function clearRunScores() {
-  if (!confirm("Clear ALL 1.5 mile run results?")) return;
-  cadets.forEach(c => {
-    c.laps = 0;
-    c.finishedRun = false;
-    c.runTime = "";
+  showConfirm("Clear all 1.5 mile run results?", () => {
+    cadets.forEach(c => {
+      c.laps = 0;
+      c.finishedRun = false;
+      c.runTime = "";
+    });
+    saveData();
+    renderRun();
   });
-  saveData();
-  renderRun();
 }
 
 function clearSprintScores() {
-  if (!confirm("Clear ALL 300m sprint results?")) return;
-  cadets.forEach(c => {
-    c.sprintTime = "";
-    c.sprintFinished = false;
-    c.sprintSelected = false;
+  showConfirm("Clear all 300m sprint results?", () => {
+    cadets.forEach(c => {
+      c.sprintTime = "";
+      c.sprintFinished = false;
+      c.sprintSelected = false;
+    });
+    saveData();
+    renderSprint();
   });
-  saveData();
-  renderSprint();
 }
 
 /******************** PUSHUPS ********************/
@@ -249,8 +265,7 @@ function startRun() {
   runStart = Date.now();
 
   runInterval = setInterval(() => {
-    document.getElementById("runTimer").innerText =
-      formatTime(Date.now() - runStart);
+    document.getElementById("runTimer").innerText = formatTime(Date.now() - runStart);
   }, 10);
 }
 
@@ -270,7 +285,6 @@ function addLap(idx) {
 
 function stopRunner(idx) {
   if (!runActive || cadets[idx].finishedRun) return;
-
   cadets[idx].finishedRun = true;
   cadets[idx].runTime = formatTime(Date.now() - runStart);
   saveData();
@@ -288,7 +302,6 @@ function renderRun() {
     row.draggable = true;
     row.dataset.idx = idx;
 
-    // ✅ LAPS DISPLAY IS BACK (but still not exported)
     row.innerHTML = `
       <strong>${c.name}</strong>
       | Laps: ${c.laps}
@@ -309,8 +322,7 @@ function startSprint() {
   sprintStart = Date.now();
 
   sprintInterval = setInterval(() => {
-    document.getElementById("sprintTimer").innerText =
-      formatTime(Date.now() - sprintStart);
+    document.getElementById("sprintTimer").innerText = formatTime(Date.now() - sprintStart);
   }, 10);
 }
 
@@ -360,9 +372,7 @@ function renderSprint() {
 
 /******************** EXPORT ********************/
 function exportToExcel() {
-  // ✅ No laps exported
   let csv = "Name,Pushups,Situps,1.5 Mile Time,300m Time\n";
-
   cadets.forEach(c => {
     csv += `"${c.name}",${c.pushups},${c.situps},${c.runTime},${c.sprintTime}\n`;
   });
@@ -386,7 +396,6 @@ function enableDrag(el, orderArray) {
 
   el.addEventListener("drop", e => {
     e.preventDefault();
-
     const dragged = Number(e.dataTransfer.getData("text/plain"));
     const target = Number(el.dataset.idx);
 
@@ -404,13 +413,9 @@ function enableDrag(el, orderArray) {
 function renderCadets() {
   const list = document.getElementById("cadetList");
   list.innerHTML = "";
-
   cadets.forEach((c, idx) => {
     const li = document.createElement("li");
-    li.innerHTML = `
-      ${c.name}
-      <button onclick="deleteCadet(${idx})" style="color:red;">✖</button>
-    `;
+    li.innerHTML = `${c.name} <button onclick="deleteCadet(${idx})" style="color:red;">✖</button>`;
     list.appendChild(li);
   });
 }
